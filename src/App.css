@@ -1,0 +1,239 @@
+@import url(https://fonts.bunny.net/css?family=gemunu-libre:300,400,700);
+
+@layer base, cards;
+
+
+html, body, #root, .App {
+  margin: 0;
+  padding: 0;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  :root {
+    color-scheme: light dark;
+    --bg-dark: rgb(24, 24, 27);
+    --bg-light: rgb(231, 229, 228);
+    --txt-light: rgb(10, 10, 10);
+    --txt-dark: rgb(245, 245, 245);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: light-dark(var(--bg-light), var(--bg-dark));
+    color: light-dark(var(--txt-light), var(--txt-dark));
+    min-height: 100svh;
+    font-size: 1rem;
+    font-family: system-ui;
+    line-height: 1.5;
+}
+}
+
+@layer cards {
+  .container {
+    --card-bg-clr: rgb(15, 23, 43);
+    --card-txt-clr: white;
+    --card-border-color: light-dark(rgba(0 0 0 / .5), rgba(255 255 255 / .25));
+    --card-cta-clr: rgb(245, 73, 0);
+    --card-cta-clr-hover: rgb(154, 230, 0);
+    --card-toggle-duration: 250ms;
+    margin: auto;
+    width: 70%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    font-family: 'Gemunu Libre', sans-serif;
+  }
+
+  .cards {
+    perspective: 1000px;
+    aspect-ratio: 4/5;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+
+  .card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background-color: var(--card-bg-clr);
+    color: var(--card-txt-clr);
+    border: 1px solid var(--card-border-color);
+    overflow: hidden;
+  }
+
+  .card-photo {
+    transform: rotateY(0deg);
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+  }
+
+  .card-text {
+    transform: rotateY(180deg);
+  }
+
+  .card-photo > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transition: scale 3s ease-in-out;
+    scale: 1.35;
+  }
+
+  .card-photo:hover > img {
+    scale: 1;
+  }
+
+  .card-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to top, black, transparent);
+    z-index: 1;
+  }
+
+  .card-photo > h2 {
+    margin-block: 75% 0;
+    z-index: 2;
+    padding-inline: 1rem;
+    color: white;
+  }
+
+  .card-photo > p {
+    margin-block: 0;
+    z-index: 2;
+    padding-inline: 1rem;
+    color: white;
+  }
+
+  .card-photo > a {
+    z-index: 2;
+    padding-inline: 1rem;
+    color: var(--card-cta-clr);
+    text-decoration: none;
+    transition: color 150ms ease-in-out;
+  }
+
+  .card-photo > a:hover {
+    color: var(--card-cta-clr-hover);
+  }
+
+  .card-text {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    padding: 2rem;
+  }
+
+  .card-text > h1 {
+    font-size: 2.25rem;
+    margin-block: 0;
+  }
+
+  .card > a {
+    padding-bottom: 1rem;
+    text-decoration: none;
+    color: var(--card-cta-clr);
+    transition: color 150ms ease-in-out, translate 300ms ease-in-out var(--card-toggle-duration);
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+  }
+
+  .card > a::after {
+    content: '\279C';
+    transition: opacity 140ms ease-in-out, translate 150ms ease-in-out;
+    opacity: var(--a-icon-opacity, 0);
+    translate: var(--a-icon-x, -20px) 0;
+  }
+
+  .card > a:is(:hover, :focus-visible) {
+    --card-cta-clr: var(--card-cta-clr-hover);
+    --a-icon-opacity: 1;
+    --a-icon-x: 0;
+  }
+
+  .card-text > a {
+    translate: 0 var(--card-text-link-y, 100px);
+  }
+
+  .card-text > p {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    position: relative;
+  }
+
+  .layout {
+    width: 100%;
+    min-height:100%;
+    display: grid;
+    grid:
+      "header" auto
+      "main" 1fr
+      "footer" auto
+      / 1fr;
+    gap: 8px;
+  }
+  
+  .header { 
+    grid-area: header;
+    width:100%;
+    height:7.5vh;
+    background-color: aliceblue;
+    position:fixed;
+    z-index: 1000;
+  }
+  .main {
+    grid-area: main; 
+    padding-top:100px;
+    padding-left:75px;  
+  }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background-color: rgba(255, 255, 255, 0.473);
+    z-index: 1000;
+  }
+
+  @keyframes subtleScroll {
+    0% {
+      background-position: center 48%;
+    }
+    50% {
+      background-position: center 52%;
+    }
+    100% {
+      background-position: center 48%;
+    }
+  }
+  
+  body.animated-bg::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: -1;
+  }  
+
+  body.animated-bg {
+    animation: subtleScroll 10s ease-in-out infinite;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  
+}
