@@ -1,5 +1,12 @@
 @import url(https://fonts.bunny.net/css?family=gemunu-libre:300,400,700);
 
+@font-face {
+  font-family: 'Minigap';
+  src: url('./fonts/minigap.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base, cards;
 
 
@@ -69,6 +76,10 @@ html, body, #root, .App {
   }
 
   .card-photo {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: flex-start; /* Aligns title to the top */
+    position: relative;
     transform: rotateY(0deg);
     display: grid;
     grid-template-rows: 1fr auto auto;
@@ -77,6 +88,31 @@ html, body, #root, .App {
   .card-text {
     transform: rotateY(180deg);
   }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0.5rem 1rem;
+    z-index: 2;
+  }
+  
+  .card-tags .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 12px;
+    background-color: rgb(59, 59, 59);
+    color: rgb(156, 156, 156);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    font-family: inherit;
+    border: 1px solid rgb(59, 59, 59);
+    white-space: nowrap;
+  }  
 
   .card-photo > img {
     position: absolute;
@@ -102,10 +138,13 @@ html, body, #root, .App {
   }
 
   .card-photo > h2 {
-    margin-block: 75% 0;
-    z-index: 2;
+    margin-block: 0;
     padding-inline: 1rem;
     color: white;
+    z-index: 2;
+    position: relative;
+    align-self: flex-start; /* Keeps title aligned to top */
+    padding-top: 20px; /* Adjust this value to fine-tune vertical position */
   }
 
   .card-photo > p {
@@ -183,6 +222,8 @@ html, body, #root, .App {
       "footer" auto
       / 1fr;
     gap: 8px;
+    transition: transform 0.3s ease;
+    overflow-x: hidden;
   }
   
   .header { 
@@ -200,11 +241,12 @@ html, body, #root, .App {
   }
   .footer {
     position: fixed;
+    display: flex;
+    flex-direction: row-reverse;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 10vh;
-    background-color: rgba(255, 255, 255, 0.473);
     z-index: 1000;
   }
 
@@ -236,4 +278,216 @@ html, body, #root, .App {
     background-attachment: fixed;
   }
   
+  .layout.pushed {
+  transform: translateX(-500px);
+  transition: transform 0.3s ease;
+  }
+
+  .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 10px 20px;
+  }
+
+  .sidebar-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 500px;
+  height: 100vh;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  }
+
+  .layout.pushed ~ .sidebar-panel {
+  transform: translateX(0);
+  }
+
+  .toggle-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  position: relative;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .sidebar-panel li {
+  color: white;
+  font-size: 1rem;
+  padding: 0.5rem;
+  }
+
+  .sidebar-panel ul {
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none;
+  }
+
+  .sidebar-panel {
+  overflow-y: auto !important;
+  height: 100vh !important;
+  }
+
+  .dropzone {
+    width:15%;
+    height:100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .dropzone > p {
+  color: black;
+  margin: auto;
+  font-weight: 900;
+  text-shadow:
+    -1px -1px 0 white,
+     1px -1px 0 white,
+    -1px  1px 0 white,
+     1px  1px 0 white;
+  }
+
+  .arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgb(255, 255, 255);
+  margin-right: 5px;
+  animation: upDown 0.5s infinite alternate;
+  }
+  @keyframes upDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(5px);
+  }
+  }
+}
+
+.cart-total {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid #ccc;
+  background-color: #2a2a2a;
+  border-radius: 4px;
+}
+
+.cart-total p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  color: #4CAF50;
+}
+
+.cart-total button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.cart-total button:hover {
+  background-color: #45a049;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-controls button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.quantity-controls button:hover {
+  background-color: #45a049;
+}
+
+.quantity-controls span {
+  min-width: 30px;
+  text-align: center;
+}
+
+.sidebar-panel ul li {
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-panel ul li:last-child {
+  border-bottom: none;
+}
+
+.logo {
+  font-family: 'Minigap';
+  font-size: 2rem;
+  color: #010057;
+  font-weight: bold;
 }
